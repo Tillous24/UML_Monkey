@@ -1,0 +1,217 @@
+@startuml
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+hide enum methods
+hide empty members
+
+class Ressource{
+    -ID_Ressource: String
+    --
+    +Typ: String
+    +ID_Gruppe: Integer
+}
+class KursRessource extends Ressource{
+    -ID_Ressource: Integer
+    -ID_Kurstermin: String
+    --
+    +Mietbeginn: Date
+    +Mietende. Date
+    +prim: Boolean
+}
+class Gruppe{
+    -ID_Gruppe: Integer
+    --
+    +Gruppe: String
+}
+class Produkt{
+    -Kurs: String
+    --
+    +Titel_de: String
+    +Titel_en: String
+    +Titel_f: String
+    +Beschreibung_de: String
+    +Beschreibung_en: String
+    +Beschreibung_f: String
+    +Dauer: Integer
+    +Preis_eu: Integer
+    +Preis_chf: Integer
+    +{abstract}ID_Gruppe: Integer
+}
+class Kurstermin{
+    -ID_Kurstermin: Integer
+    --
+    +Kurs: String
+    +Start_Datum: Date
+    +End_Datum: Date
+    +Start_Zeit: Date
+    +ID_Adresse: String
+    +ID_Sprache: Integer
+    +findet_statt: Boolean
+}
+class Notiz{
+    -ID_Kurstermin: Integer
+    -ID_Ressource: String
+    -Datum: Date
+    --
+    +Notiz: Text
+}
+class TrainerKurs{
+    -Kürzel: Text
+    -Kurs: Text
+
+}
+class Adresse{
+    -ID_Adresse: Integer
+    --
+    +Firma: String
+    +Strasse: String
+    +PLZ: String
+    +Ort: String
+    +ID_Land: String
+    +Homepage: String
+    +KursLocation: Boolean
+}
+class History{
+    -ID_Kurstermin: Integer
+    -Kürzel: String
+    --
+    +Typ: String
+    +Rückmeldung: String
+    +Status: String
+    +Datum_Rückmeldung: Date
+    +Datum_Status: Date
+    +Mail: String
+}
+class Land{
+    -ID_Land: String
+    --
+    +Land: String
+}
+class TrainerInLand{
+    +Kürzel: String
+    +ID_Land: String
+}
+class FeiertagInLand{
+    -ID_Feiertag: Integer
+    -ID_Land: String
+    --
+    +Bemerkung: String
+}
+class Feiertage{
+    -ID_Feiertag: Integer
+    --
+    +Start: Date: Date
+    +End: Date: Date
+}
+class Sprache{
+    -ID_Sprache: Integer
+    --
+    +Sprache: String
+}
+class TrainerSprichtSprache{
+    -Kürzel: String
+    -Sprache: Integer
+}
+class Trainer{
+    -Kürzel: String
+    --
+    +Name: String
+    +Vorname: String
+    +Abteilung: String
+    +Kategorie: String
+    +Manager: String
+    +WLM: String
+    +Obsolete: Boolean
+}
+class TrainerAdresse{
+    -Kürzel: String
+    -ID_Adresse: Integer
+    --
+    +Tel: String
+    +Email: String
+    +Typ: String
+}
+class Bankverbindung{
+    -ID_Kontodaten: Integer
+    --
+    +Kürzel: String
+    +Kontoinhaber: String
+    +KontoNr: Integer
+    +BLZ: Integer
+    +Bank: String
+}
+class tbl_compact{
+    +Anzahl
+}
+class MailSettings{
+    -ID_Mailtext
+    --
+    +Betreff
+    +Text
+    +Absender
+    +Rechtshinweis
+}
+
+
+Ressource "1..*" -- "1\n" Gruppe
+Gruppe "1" -- "1..*" Produkt
+KursRessource "1" -- "1..*" Notiz
+
+Produkt "1" -- "1..*" TrainerKurs
+Produkt "1" -- "1..*" Kurstermin
+
+Kurstermin "1" -- "1..*" KursRessource
+Kurstermin "1" -- "1..*" Notiz
+Kurstermin "1" -- "1..*" History
+Kurstermin  -- Sprache
+Kurstermin  -- Adresse
+
+TrainerKurs "1..*" -- "1" Trainer
+
+Adresse "1" -- "1..*" TrainerAdresse
+Adresse "1..*" -- "1" Land
+
+History -- "1" Trainer
+
+Land "1" -- FeiertagInLand
+Land "1" -- "1..*" TrainerInLand
+
+Sprache "1" -- "1..*" TrainerSprichtSprache
+
+TrainerAdresse "1..*" -- "1"Trainer
+
+FeiertagInLand "1..*" -- "1" Feiertage
+
+TrainerInLand "1..*" -- "1" Trainer
+
+TrainerSprichtSprache "1..*" -- "1" Trainer
+
+Trainer "1" -- "1..*" Bankverbindung
+
+package "Frontend" #DDDDDD{
+    Interface Settings{
+        -loc
+        -ID
+        --
+        +compact
+        +Year
+        +mail_gewählt
+        +mail_recever
+    }
+    Interface User_Res_gew{
+        -ID_Ressource
+        -Page
+        --
+        +ID_Gruppe
+    }
+    Interface User_Raum_gew{
+        -ID_Ressource
+        -Page
+        --
+        +ID_Gruppe
+    }
+
+}
+
+@enduml
